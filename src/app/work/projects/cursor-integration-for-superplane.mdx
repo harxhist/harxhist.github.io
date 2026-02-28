@@ -1,0 +1,51 @@
+---
+title: "Cursor Integration for Superplane"
+publishedAt: "2026-02-12"
+summary: "Added a production-ready Cursor integration to Superplane so teams can launch Cloud Agents and track usage directly inside their workflows."
+images:
+  - "/images/Cursor.mp4"
+poster: "/images/Cursor-poster.jpg"
+team:
+  - name: "Superplane – Cursor Integration"
+    role: "Contributor"
+    avatar: "/images/avatar.jpg"
+    linkedIn: "https://www.linkedin.com/in/hrxh"
+link: "https://docs.superplane.com/components/cursor/"
+---
+
+## Overview
+
+I contributed a new Cursor integration to **Superplane**, an open-source internal developer portal. The integration lets teams orchestrate Cursor Cloud Agents and fetch usage analytics as part of their existing Superplane workflows, making AI-assisted coding and reporting a first-class part of their platform.
+
+The work shipped in a merged PR to the main repository ([feat: Add Cursor Integration – PR #2991](https://github.com/superplanehq/superplane/pull/2991)) and is now part of Superplane's standard component catalog.
+
+## What I Built
+
+- **Launch Cloud Agent (Action)** – Triggers a Cursor Cloud Agent on a specific repository/branch and tracks execution through to completion, returning the PR URL, status, and summary back into the workflow output.
+- **Get Daily Usage Data (Action)** – Fetches per-user daily usage metrics from the Cursor Admin API so teams can build cost and productivity dashboards ([docs](https://docs.superplane.com/components/cursor/)).
+- **Robust lifecycle monitoring** – Implemented a monitor that combines webhooks and polling to handle the full agent lifecycle, including transient failures and retries, while keeping executions idempotent.
+
+## Architecture & Implementation
+
+- **Authentication & configuration**
+  - Uses Cursor BasicAuth for both the Admin and Cloud Agent APIs.
+  - Exposes configuration for API keys, repositories, branches, and date ranges directly in the Superplane UI.
+
+- **Agent orchestration**
+  - Uses Superplane's execution context to launch agents, store agent IDs, and wire webhooks with signed secrets.
+  - Webhook handler verifies signatures, looks up the correct execution from the agent ID, and then emits final status back into the workflow stream.
+  - Falls back to a polling strategy to guard against missed webhooks and keep executions from getting stuck.
+
+- **Usage analytics**
+  - Integrates with Cursor's Admin API to fetch daily usage data: lines added/deleted, completions, request counts, and model usage.
+  - Normalizes this into a structured payload that Superplane can feed into dashboards or downstream automation.
+
+## Tech Stack
+
+- **Languages & Frameworks** – Go, TypeScript, React
+- **Platforms** – Cursor Cloud Agents, Cursor Admin API, Superplane component framework
+- **Infra** – Webhook-based eventing with secure signing and idempotent execution-state updates
+
+## Outcome
+
+This integration lets Superplane users treat Cursor as a native automation primitive: they can launch agents against their repos, track progress, and analyze usage without leaving Superplane. It also demonstrates my ability to work inside a large open-source codebase, design resilient webhook flows, and ship features all the way from Go backends to React-based configuration UIs.

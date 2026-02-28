@@ -1,0 +1,35 @@
+---
+title: "Shorten"
+publishedAt: "2025-01-10"
+summary: "A scalable web crawler and summarizer using Go, Next.js, and Groq AI to extract webpage content into structured markdown, with AWS Polly text-to-speech and word-level highlighting. Containerized with Docker and orchestrated on AWS."
+images:
+  - "/images/Shorten.png"
+link: "https://sh10.in"
+---
+
+## Overview
+
+Shorten is a scalable web crawler and summarizer that extracts webpage content and converts it into structured markdown. Built with Go, Next.js, and Groq AI, the system delivers concise summaries while keeping user engagement high through real-time text-to-speech powered by AWS Polly over WebSockets, with synchronized word-level visual highlighting.
+
+## Project Summary
+
+Developed a scalable web crawler and summarizer using Go, Next.js, and Groq AI to extract webpage content and convert it into structured markdown. To enhance user engagement, I integrated AWS Polly over WebSockets, delivering real-time text-to-speech with synchronized, word-level visual highlighting. The system is containerized with Docker, dynamically orchestrated on AWS using Auto Scaling Groups and a Caddy reverse proxy, and actively monitored for latency and traffic optimization using PostgreSQL and Google Analytics.
+
+## Key Features
+
+- **Web crawler & summarizer** – Extract content from any URL and turn it into clean, structured markdown via Groq AI.
+- **Real-time text-to-speech** – AWS Polly over WebSockets with word-level sync and on-page highlighting.
+- **Scalable infrastructure** – Docker containers, AWS EC2, Auto Scaling Groups, and Caddy as reverse proxy.
+- **Storage & object store** – PostgreSQL for metadata and analytics, MinIO for object storage.
+- **Observability** – Latency and traffic monitoring with PostgreSQL and Google Analytics.
+
+## Tech Stack
+
+- **Backend & API** – Go, Next.js, TailwindCSS
+- **AI** – Groq AI for summarization
+- **Data** – PostgreSQL, MinIO
+- **Infrastructure** – Docker, Caddy, AWS (EC2, ASG, Polly)
+
+## Outcome
+
+Shorten gives users a fast, free way to summarize any webpage with optional audio playback and visual follow-along. The stack is built for reliability and scale, with clear separation between crawling, summarization, and TTS, and is ready to extend with more AI providers or deployment targets.
