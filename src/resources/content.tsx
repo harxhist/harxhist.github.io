@@ -88,7 +88,7 @@ const home: Home = {
     displayName: "#harxhist",
     tagline: "Praise dev in devils",
     fixedAddress: "Here's my only fixed address",
-    bio: "Backend dev. I build scalable systems and ship AI-focused infra. Hoping to conquer Everest base-camp this year.",
+    bio: "Backend dev. I build scalable systems and ship AI-focused infra.",
     cta: "Always interested in cool projects, reach out!",
     currentStatus: (
       <>
@@ -104,8 +104,7 @@ const home: Home = {
     interests:
       "INTERESTS : open source, distributed systems, AI, books, brain, movies, music, mountains",
     dislikesTitle: "pure hate",
-    dislikes: "PURE HATE: ads, red tape, bloatware, unnecessary meetings, waking up early",
-    // linksSectionTitle: "sauce",
+    dislikes: "HATE: ads, red tape, bloatware, unnecessary meetings, waking up early",
     linkItems: [
       { label: "github", href: social.find((s) => s.name === "GitHub")?.link ?? "#" },
       { label: "hire me", href: "/about" },
