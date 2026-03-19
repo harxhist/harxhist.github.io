@@ -85,8 +85,8 @@ export interface BasePageConfig {
 export type Landing = {
   /** Small top label (e.g. "hologirl" or a handle) */
   topLabel?: string;
-  /** Display name with optional symbol (e.g. "# ♡ alexine") */
-  displayName: string;
+  /** Display name with optional custom prefix/cursor styling */
+  displayName: React.ReactNode;
   /** Short tagline, can be in another language */
   tagline?: string;
   /** "Only fixed address" or similar one-liner */

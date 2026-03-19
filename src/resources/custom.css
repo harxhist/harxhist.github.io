@@ -2,3 +2,18 @@
 .matrix-landing .matrix-link:hover {
   text-decoration: underline;
 }
+
+.matrix-landing .terminal-cursor {
+  animation: terminal-cursor-blink 1s steps(1, end) infinite;
+}
+
+@keyframes terminal-cursor-blink {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}

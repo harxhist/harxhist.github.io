@@ -85,10 +85,27 @@ const home: Home = {
   
   landing: {
     topLabel: "Harsh",
-    displayName: "#harxhist",
+    displayName: (
+      <>
+        harxhist
+        <span
+          className="terminal-cursor"
+          aria-hidden="true"
+          style={{
+            display: "inline-block",
+            width: "0.5em",
+            height: "0.90em",
+            marginRight: "0.35em",
+            background: "#00ff41",
+            borderRadius: "1px",
+            verticalAlign: "-0.08em",
+          }}
+        />
+      </>
+    ),
     tagline: "Praise dev in devils",
     fixedAddress: "Here's my only fixed address",
-    bio: "Backend dev. I build scalable systems and ship AI-focused infra.",
+    bio: "< Fullstack developer />",
     cta: "Always interested in cool projects, reach out!",
     currentStatus: (
       <>
@@ -104,7 +121,7 @@ const home: Home = {
     interests:
       "INTERESTS : open source, distributed systems, AI, books, brain, movies, music, mountains",
     dislikesTitle: "pure hate",
-    dislikes: "HATE: ads, red tape, bloatware, unnecessary meetings, waking up early",
+    dislikes: "HATE: ads, red tape, bloatware, meetings, waking up",
     linkItems: [
       { label: "github", href: social.find((s) => s.name === "GitHub")?.link ?? "#" },
       { label: "hire me", href: "/about" },
