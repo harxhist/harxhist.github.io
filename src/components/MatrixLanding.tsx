@@ -1,33 +1,148 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect, useRef, useState } from "react";
 import { MatrixRain } from "./MatrixRain";
 import { SkullLinesBackground } from "./SkullLinesBackground";
 import type { Landing } from "@/types";
+import styles from "./MatrixLanding.module.scss";
 
 const matrixGreen = "#00ff41";
+/** Reticle when hovering links */
+const cursorRed = "#ff3333";
+const cursorRedCore = "#cc2222";
 const matrixDim = "rgba(0, 255, 65, 0.6)";
 const matrixFaint = "rgba(0, 255, 65, 0.35)";
 
+function useMatrixCustomCursor() {
+  const [enabled, setEnabled] = useState(false);
+
+  useEffect(() => {
+    const update = () => {
+      if (typeof window === "undefined") return;
+      const fine =
+        window.matchMedia("(hover: hover) and (pointer: fine)").matches &&
+        !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      setEnabled(fine);
+    };
+    update();
+    const mqFine = window.matchMedia("(hover: hover) and (pointer: fine)");
+    const mqMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    mqFine.addEventListener("change", update);
+    mqMotion.addEventListener("change", update);
+    return () => {
+      mqFine.removeEventListener("change", update);
+      mqMotion.removeEventListener("change", update);
+    };
+  }, []);
+
+  return enabled;
+}
+
 export function MatrixLanding({ data }: { data: Landing }) {
+  const rootRef = useRef<HTMLDivElement>(null);
+  const customCursor = useMatrixCustomCursor();
+  const [pointer, setPointer] = useState<{ x: number; y: number } | null>(null);
+  const [overLink, setOverLink] = useState(false);
+
+  useEffect(() => {
+    const el = rootRef.current;
+    if (!el || !customCursor) return;
+
+    const onMove = (e: MouseEvent) => {
+      setPointer({ x: e.clientX, y: e.clientY });
+      const t = e.target;
+      if (t instanceof Element) {
+        const a = t.closest("a");
+        setOverLink(a !== null && el.contains(a));
+      } else {
+        setOverLink(false);
+      }
+    };
+    const onLeave = () => {
+      setPointer(null);
+      setOverLink(false);
+    };
+
+    el.addEventListener("mousemove", onMove);
+    el.addEventListener("mouseleave", onLeave);
+    return () => {
+      el.removeEventListener("mousemove", onMove);
+      el.removeEventListener("mouseleave", onLeave);
+    };
+  }, [customCursor]);
+
   return (
-    <div className="matrix-landing">
+    <div
+      ref={rootRef}
+      className={`${styles.root} matrix-landing ${customCursor ? styles.customCursor : ""}`}
+    >
+      {customCursor && pointer !== null && (
+        <div
+          className={`${styles.reticle} ${overLink ? styles.reticleLink : ""}`}
+          style={{
+            left: pointer.x,
+            top: pointer.y,
+            transform: "translate(-50%, -50%)",
+          }}
+          aria-hidden
+        >
+          <div className={styles.reticleGlowOuter} />
+          <div className={styles.reticleGlowInner} />
+          <svg
+            className={styles.reticleSvg}
+            viewBox="0 0 32 32"
+            width={28}
+            height={28}
+            aria-hidden
+          >
+            <line
+              x1="16"
+              y1="0"
+              x2="16"
+              y2="13"
+              stroke={overLink ? cursorRed : matrixGreen}
+              strokeWidth={overLink ? 1.35 : 1}
+            />
+            <line
+              x1="16"
+              y1="19"
+              x2="16"
+              y2="32"
+              stroke={overLink ? cursorRed : matrixGreen}
+              strokeWidth={overLink ? 1.35 : 1}
+            />
+            <line
+              x1="0"
+              y1="16"
+              x2="13"
+              y2="16"
+              stroke={overLink ? cursorRed : matrixGreen}
+              strokeWidth={overLink ? 1.35 : 1}
+            />
+            <line
+              x1="19"
+              y1="16"
+              x2="32"
+              y2="16"
+              stroke={overLink ? cursorRed : matrixGreen}
+              strokeWidth={overLink ? 1.35 : 1}
+            />
+            <circle
+              cx="16"
+              cy="16"
+              r={overLink ? 2.75 : 2}
+              fill={overLink ? cursorRedCore : matrixGreen}
+            />
+          </svg>
+        </div>
+      )}
       <SkullLinesBackground />
       <MatrixRain />
       <main
-        className="matrix-content"
+        className={`${styles.main} matrix-content`}
         style={{
-          position: "relative",
-          zIndex: 1,
-          minHeight: "100vh",
-          padding: "clamp(2rem, 6vw, 4rem)",
-          fontFamily: "var(--font-code), monospace",
           color: matrixGreen,
-          maxWidth: "42rem",
-          margin: "0 auto",
-          display: "flex",
-          flexDirection: "column",
-          gap: "1rem",
         }}
       >
         {data.topLabel && (
@@ -151,7 +266,7 @@ export function MatrixLanding({ data }: { data: Landing }) {
           }}
         >
           <Link
-            href="/about"
+            href="/bio"
             className="matrix-link"
             style={{
               color: matrixGreen,
@@ -160,7 +275,20 @@ export function MatrixLanding({ data }: { data: Landing }) {
               fontWeight: 600,
             }}
           >
-            → View portfolio (about · work · gallery)
+            → personal (bio · gallery)
+          </Link>
+          <br />
+          <Link
+            href="/cv"
+            className="matrix-link"
+            style={{
+              color: matrixGreen,
+              textDecoration: "none",
+              fontSize: "1rem",
+              fontWeight: 600,
+            }}
+          >
+            → portfolio (CV · projects)
           </Link>
         </section>
       </main>

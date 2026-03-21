@@ -13,7 +13,7 @@ import {
   Avatar,
   Line,
 } from "@once-ui-system/core";
-import { baseURL, about, blog, person } from "@/resources";
+import { baseURL, cv, blog, person } from "@/resources";
 import { formatDate } from "@/utils/formatDate";
 import { getPosts } from "@/utils/utils";
 import { Metadata } from "next";
@@ -98,7 +98,7 @@ export default async function Blog({ params }: { params: Promise<{ slug: string 
             }
             author={{
               name: person.name,
-              url: `${baseURL}${about.path}`,
+              url: `${baseURL}${cv.path}`,
               image: `${baseURL}${person.avatar}`,
             }}
           />

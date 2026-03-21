@@ -55,7 +55,7 @@ export type Social = Array<{
    * The link is not validated by code, make sure it's correct
    */
   link: string;
-  /** Whether this social link is essential and should be displayed on the about page */
+  /** Whether this social link is essential and should be displayed on the CV page */
   essential?: boolean;
 }>;
 
@@ -139,10 +139,10 @@ export interface Home extends BasePageConfig {
 }
 
 /**
- * About page configuration.
- * @description Configuration for the About page, including sections for table of contents, avatar, calendar, introduction, work experience, studies, and technical skills.
+ * CV (curriculum vitae) page configuration.
+ * @description Configuration for the CV page, including sections for table of contents, avatar, calendar, introduction, work experience, studies, and technical skills.
  */
-export interface About extends BasePageConfig {
+export interface Cv extends BasePageConfig {
   /** Table of contents configuration */
   tableOfContent: {
     /** Whether to display the table of contents */
@@ -253,10 +253,21 @@ export interface About extends BasePageConfig {
 export interface Blog extends BasePageConfig {}
 
 /**
- * Work/projects page configuration.
- * @description Configuration for the Work/Projects page, including metadata and navigation label.
+ * Personal bio page configuration.
+ * @description Configuration for the personal `/bio` page and its section labels.
  */
-export interface Work extends BasePageConfig {}
+export interface Bio extends BasePageConfig {
+  intro: React.ReactNode;
+  writingsTitle: string;
+  galleryTitle: string;
+  contactTitle: string;
+}
+
+/**
+ * Projects index page configuration (`/projects`).
+ * @description Metadata and navigation label for the portfolio projects listing and detail routes.
+ */
+export interface ProjectsPage extends BasePageConfig {}
 
 /**
  * Gallery page configuration.

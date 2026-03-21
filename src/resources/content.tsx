@@ -1,10 +1,10 @@
-import { About, Blog, Gallery, Home, Newsletter, Person, Social, Work } from "@/types";
+import { Bio, Blog, Cv, Gallery, Home, Newsletter, Person, ProjectsPage, Social } from "@/types";
 import { Line, Row, Text } from "@once-ui-system/core";
 
 const person: Person = {
   firstName: "Harsh",
-  lastName: "Rajput",
-  name: `Harsh Rajput`,
+  lastName: "",
+  name: "Harsh",
   role: "Software Engineer",
   avatar: "/images/avatar.jpg",
   email: "harxhist@gmail.com",
@@ -52,7 +52,7 @@ const social: Social = [
   {
     name: "Resume",
     icon: "document",
-    link: "/HarshRajput_resume.pdf",
+    link: "/Harsh_resume.pdf",
     essential: true,
   },
 ];
@@ -62,7 +62,7 @@ const home: Home = {
   image: "/images/og/home.jpg",
   label: "Home",
   title: `${person.name}`,
-  description: `Portfolio website showcasing my work as a ${person.role}`,
+  description: `Portfolio website showcasing my projects as a ${person.role}`,
   headline: <>Building bridges with code</>,
   featured: {
     display: true,
@@ -71,11 +71,11 @@ const home: Home = {
         <strong className="ml-4">Shorten</strong>{" "}
         <Line background="brand-alpha-strong" vert height="20" />
         <Text marginRight="4" onBackground="brand-medium">
-          Featured work
+          Featured projects
         </Text>
       </Row>
     ),
-    href: "/work/shorten",
+    href: "/projects/shorten",
   },
   subline: (
     <>
@@ -105,35 +105,35 @@ const home: Home = {
     ),
     tagline: "Praise dev in devils",
     fixedAddress: "Here's my only fixed address",
-    bio: "< Fullstack developer />",
-    cta: "Always interested in cool projects, reach out!",
-    currentStatus: (
-      <>
-        <span style={{ fontSize: "20px", marginRight: "0.5rem" }}>⌖</span>
-        Dehradun, India
-      </>
-    ),
-    highlight: {
-      icon: "♪",
-      title: " Blend with me on Spotify ♪",
-      href: "https://open.spotify.com/blend/taste-match/e49f9562086b36e8?si=utGlHoInSJOZ6z234s4CCA&fallback=getapp",
-    },
+    bio: "<This world is a courtroom. I could defend, but I'm giggling./>",
+    cta: "Always interested in cool/unique stuff, reach out!",
+    // currentStatus: (
+    //   <>
+    //     <span style={{ fontSize: "20px", marginRight: "0.5rem" }}>⌖</span>
+    //     Dehradun, India
+    //   </>
+    // ),
+    // highlight: {
+    //   icon: "♪",
+    //   title: " Blend with me on Spotify ♪",
+    //   href: "https://open.spotify.com/blend/taste-match/e49f9562086b36e8?si=utGlHoInSJOZ6z234s4CCA&fallback=getapp",
+    // },
     interests:
-      "INTERESTS : open source, distributed systems, AI, books, brain, movies, music, mountains",
+      "INTERESTS : books, brain, movies, mountains, writing, running, businesses, design, open-source, distributed systems, AI agents", 
     dislikesTitle: "pure hate",
-    dislikes: "HATE: ads, red tape, bloatware, meetings, waking up",
+    dislikes: "HATE: red tape, ads, bloatware, capitalism, meetings, waking up",
     linkItems: [
       { label: "github", href: social.find((s) => s.name === "GitHub")?.link ?? "#" },
-      { label: "hire me", href: "/about" },
+      { label: "hire me", href: "/cv" },
       { label: "email", href: `mailto:${person.email}` },
     ],
   },
 };
 
-const about: About = {
-  path: "/about",
-  label: "About",
-  title: `About – ${person.name}`,
+const cv: Cv = {
+  path: "/cv",
+  label: "CV",
+  title: `CV – ${person.name}`,
   description: `Meet ${person.name}, ${person.role} from ${person.location}`,
   tableOfContent: {
     display: true,
@@ -151,7 +151,7 @@ const about: About = {
     title: "Introduction",
     description: (
       <>
-        Builds software that actually holds up. Microservices, AI inference at scale, infra that ships. Still chasing a sub30 5K run but I’ll crush you at table tennis.
+        Builds software that actually holds up. Microservices, AI inference at scale, infra that ships.
       </>
     ),
   },
@@ -270,12 +270,23 @@ const blog: Blog = {
   description: `Read what ${person.name} has been up to recently`,
 };
 
-const work: Work = {
-  path: "/work",
-  label: "Work",
-  title: `Projects`,
+const bioPage: Bio = {
+  path: "/bio",
+  label: "Bio",
+  title: `Personal – ${person.name}`,
+  description: `Personal bio, writings, and gallery of ${person.name}`,
+  intro:
+    "Builder, runner, and mountain person. I enjoy systems work, simple tools, and writing notes that help me think clearly.",
+  writingsTitle: "Musings",
+  galleryTitle: "Gallery",
+  contactTitle: "Find me",
+};
+
+const projects: ProjectsPage = {
+  path: "/projects",
+  label: "Projects",
+  title: ``,
   description: `Design and dev projects by ${person.name}`,
-  
 };
 
 const gallery: Gallery = {
@@ -294,4 +305,4 @@ const gallery: Gallery = {
   ],
 };
 
-export { person, social, newsletter, home, about, blog, work, gallery };
+export { person, social, newsletter, home, cv, blog, bioPage, projects, gallery };

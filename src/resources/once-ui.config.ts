@@ -16,8 +16,9 @@ const baseURL: string = "https://harxhist.github.io";
 
 const routes: RoutesConfig = {
   "/": true,
-  "/about": true,
-  "/work": true,
+  "/bio": true,
+  "/cv": true,
+  "/projects": true,
   "/blog": false,
   "/gallery": true,
 };

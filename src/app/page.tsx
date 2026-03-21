@@ -11,9 +11,9 @@ import {
   Meta,
   Line,
 } from "@once-ui-system/core";
-import { home, about, person, baseURL, routes } from "@/resources";
+import { home, cv, person, baseURL, routes } from "@/resources";
 import { Mailchimp, MatrixLanding } from "@/components";
-import { Projects } from "@/components/work/Projects";
+import { Projects } from "@/components/projects/Projects";
 import { Posts } from "@/components/blog/Posts";
 
 export async function generateMetadata() {
@@ -39,7 +39,7 @@ export default function Home() {
           image={`/api/og/generate?title=${encodeURIComponent(home.title)}`}
           author={{
             name: person.name,
-            url: `${baseURL}${about.path}`,
+            url: `${baseURL}${cv.path}`,
             image: `${baseURL}${person.avatar}`,
           }}
         />
@@ -59,7 +59,7 @@ export default function Home() {
         image={`/api/og/generate?title=${encodeURIComponent(home.title)}`}
         author={{
           name: person.name,
-          url: `${baseURL}${about.path}`,
+          url: `${baseURL}${cv.path}`,
           image: `${baseURL}${person.avatar}`,
         }}
       />
@@ -98,16 +98,16 @@ export default function Home() {
           </RevealFx>
           <RevealFx paddingTop="12" delay={0.4} horizontal="center" paddingLeft="12">
             <Button
-              id="about"
+              id="cv"
               data-border="rounded"
-              href={about.path}
+              href={cv.path}
               variant="secondary"
               size="m"
               weight="default"
               arrowIcon
             >
               <Row gap="8" vertical="center" paddingRight="4">
-                {about.avatar.display && (
+                {cv.avatar.display && (
                   <Avatar
                     marginRight="8"
                     style={{ marginLeft: "-0.75rem" }}
@@ -115,7 +115,7 @@ export default function Home() {
                     size="m"
                   />
                 )}
-                {about.title}
+                {cv.title}
               </Row>
             </Button>
           </RevealFx>

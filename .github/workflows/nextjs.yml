@@ -34,6 +34,14 @@ jobs:
         run: npm ci
 
       - name: Build with Next.js
+        env:
+          MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
+          MAPBOX_STYLE: ${{ secrets.MAPBOX_STYLE }}
+          MAPBOX_STYLE_DARK: ${{ secrets.MAPBOX_STYLE_DARK }}
+          SPOTIFY_OEMBED_URL: ${{ secrets.SPOTIFY_OEMBED_URL }}
+          RAPIDAPI_HOST: ${{ secrets.RAPIDAPI_HOST }}
+          RAPIDAPI_KEY: ${{ secrets.RAPIDAPI_KEY }}
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
         run: npm run build
 
       - name: Upload artifact
