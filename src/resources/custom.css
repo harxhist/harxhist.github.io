@@ -138,6 +138,8 @@
   border-radius: 24px;
   overflow: hidden;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  /* Grid/flex children default to min-width:auto; allow columns to shrink evenly */
+  min-width: 0;
 }
 
 .showcase-card-github {
@@ -311,9 +313,18 @@
 
 .showcase-github-graph {
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
+  /* minmax(0, 1fr) keeps cells from forcing the card wider than the grid column on narrow viewports */
+  grid-template-columns: repeat(7, minmax(0, 1fr));
   gap: 3px;
   margin-top: auto;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.showcase-card-inner.showcase-github {
+  min-width: 0;
+  max-width: 100%;
 }
 
 .showcase-github-header {
@@ -321,6 +332,7 @@
   align-items: center;
   gap: 12px;
   margin-bottom: 12px;
+  min-width: 0;
 }
 
 .showcase-github-header .showcase-icon {
@@ -589,16 +601,26 @@
     padding: 80px 24px;
   }
 
+  /* minmax(0, 1fr) prevents one cell’s min-content width from blowing out the row (GitHub graph) */
   .showcase-grid {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: stretch;
+    justify-items: stretch;
   }
 
   .showcase-grid > [class*="showcase-bento-"] {
-    grid-column: auto;
     grid-row: auto;
+    min-width: 0;
+    width: 100%;
+    max-width: 100%;
   }
 
-  .showcase-card-lg {
+  /* Small cards flow in 2 columns. Must NOT use grid-column:auto — that beat .showcase-card-lg and broke span 2. */
+  .showcase-grid > [class*="showcase-bento-"]:not(.showcase-card-lg) {
+    grid-column: auto;
+  }
+
+  .showcase-grid > [class*="showcase-bento-"].showcase-card-lg {
     grid-column: span 2;
   }
 }
@@ -609,10 +631,11 @@
   }
 
   .showcase-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 
-  .showcase-card-lg {
+  /* Override span 2 from the ≤900px rule (higher specificity than plain .showcase-card-lg) */
+  .showcase-grid > [class*="showcase-bento-"].showcase-card-lg {
     grid-column: span 1;
   }
 }

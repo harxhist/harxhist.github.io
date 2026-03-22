@@ -12,10 +12,9 @@ type SocialCardsResponse = {
     label: string;
     url: string;
     embedUrl: string;
-    /** @deprecated Prefer mapboxImageUrlLight / mapboxImageUrlDark for theme-aware static export. */
-    mapboxImageUrl?: string;
-    mapboxImageUrlLight?: string;
-    mapboxImageUrlDark?: string;
+    /** Inlined at build time so the browser never calls Mapbox (avoids token URL / Referer blocks). */
+    mapboxImageDataUrlLight?: string;
+    mapboxImageDataUrlDark?: string;
   };
   github: {
     url: string;
@@ -64,10 +63,17 @@ const accounts = {
 const SPOTIFY_OEMBED_URL = process.env.SPOTIFY_OEMBED_URL?.trim();
 
 const MAPBOX_ACCESS_TOKEN = process.env.MAPBOX_ACCESS_TOKEN;
+
+/** Empty `MAPBOX_STYLE=` in .env or an empty GitHub secret is `""`, which `??` does not replace — that yields `/v1//static/` and Mapbox 404. */
+function mapboxStyleOrDefault(raw: string | undefined, fallback: string): string {
+  const t = raw?.trim();
+  return t || fallback;
+}
+
 /** Light UI — default `mapbox/streets-v12`. Override with `MAPBOX_STYLE`. */
-const MAPBOX_STYLE_LIGHT = process.env.MAPBOX_STYLE ?? "mapbox/streets-v12";
+const MAPBOX_STYLE_LIGHT = mapboxStyleOrDefault(process.env.MAPBOX_STYLE, "mapbox/streets-v12");
 /** Dark UI — default `mapbox/dark-v11`. Override with `MAPBOX_STYLE_DARK`. */
-const MAPBOX_STYLE_DARK = process.env.MAPBOX_STYLE_DARK ?? "mapbox/dark-v11";
+const MAPBOX_STYLE_DARK = mapboxStyleOrDefault(process.env.MAPBOX_STYLE_DARK, "mapbox/dark-v11");
 
 type MapUiTheme = "light" | "dark";
 
@@ -93,6 +99,26 @@ function buildMapboxStaticImageUrl(lat: string, lon: string, uiTheme: MapUiTheme
   const center = `${lo},${la},${zoom}`;
   const path = `https://api.mapbox.com/styles/v1/${style}/static/${overlay}/${center}/${width}x${height}@2x`;
   return `${path}?access_token=${encodeURIComponent(MAPBOX_ACCESS_TOKEN)}`;
+}
+
+/** Load static map on the server during build — keeps tokens off the public JSON and avoids browser Referer rules. */
+async function fetchMapboxAsDataUrl(imageUrl: string): Promise<string | undefined> {
+  try {
+    const res = await fetch(imageUrl, {
+      headers: {
+        "User-Agent": "harxh-portfolio/1.0 (next-build; https://github.com/harxhist/harxhist.github.io)",
+      },
+    });
+    if (!res.ok) {
+      return undefined;
+    }
+    const rawType = res.headers.get("content-type")?.split(";")[0]?.trim();
+    const mime = rawType?.startsWith("image/") ? rawType : "image/png";
+    const buf = Buffer.from(await res.arrayBuffer());
+    return `data:${mime};base64,${buf.toString("base64")}`;
+  } catch {
+    return undefined;
+  }
 }
 
 /** OSM embed — fallback when Mapbox token is not set. */
@@ -533,14 +559,19 @@ export async function GET() {
     response.map.embedUrl = buildMapEmbedUrl(accounts.mapCoordinates.lat, accounts.mapCoordinates.lon);
   }
 
-  const mapboxLight = buildMapboxStaticImageUrl(mapLat, mapLon, "light");
-  const mapboxDark = buildMapboxStaticImageUrl(mapLat, mapLon, "dark");
-  if (mapboxLight) {
-    response.map.mapboxImageUrlLight = mapboxLight;
-    response.map.mapboxImageUrl = mapboxLight;
-  }
-  if (mapboxDark) {
-    response.map.mapboxImageUrlDark = mapboxDark;
+  const mapboxLightUrl = buildMapboxStaticImageUrl(mapLat, mapLon, "light");
+  const mapboxDarkUrl = buildMapboxStaticImageUrl(mapLat, mapLon, "dark");
+  if (mapboxLightUrl || mapboxDarkUrl) {
+    const [dataLight, dataDark] = await Promise.all([
+      mapboxLightUrl ? fetchMapboxAsDataUrl(mapboxLightUrl) : Promise.resolve(undefined),
+      mapboxDarkUrl ? fetchMapboxAsDataUrl(mapboxDarkUrl) : Promise.resolve(undefined),
+    ]);
+    if (dataLight) {
+      response.map.mapboxImageDataUrlLight = dataLight;
+    }
+    if (dataDark) {
+      response.map.mapboxImageDataUrlDark = dataDark;
+    }
   }
 
   if (instagramMetrics.status === "fulfilled" && instagramMetrics.value) {

@@ -5,6 +5,7 @@ import "@/resources/custom.css";
 import classNames from "classnames";
 
 import { Column, Flex, Meta } from "@once-ui-system/core";
+import { GoogleAnalytics } from "@next/third-parties/google";
 import { LayoutChrome, Providers } from "@/components";
 import { baseURL, fonts, style, dataStyle, home } from "@/resources";
 
@@ -17,6 +18,8 @@ export async function generateMetadata() {
     image: home.image,
   });
 }
+
+const gaMeasurementId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
 
 export default async function RootLayout({
   children,
@@ -106,6 +109,9 @@ export default async function RootLayout({
           horizontal="center"
         >
           <LayoutChrome>{children}</LayoutChrome>
+          {gaMeasurementId ? (
+            <GoogleAnalytics gaId={gaMeasurementId} />
+          ) : null}
         </Column>
       </Providers>
     </Flex>

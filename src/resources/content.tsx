@@ -294,15 +294,8 @@ const gallery: Gallery = {
   label: "Gallery",
   title: `Photo gallery – ${person.name}`,
   description: `A photo collection by ${person.name}`,
-  images: [
-    { src: "/images/gallery/horizontal-1.jpg", alt: "image", orientation: "horizontal" },
-    { src: "/images/gallery/horizontal-2.jpg", alt: "image", orientation: "horizontal" },
-    { src: "/images/gallery/horizontal-3.jpg", alt: "image", orientation: "horizontal" },
-    { src: "/images/gallery/horizontal-4.jpg", alt: "image", orientation: "horizontal" },
-    { src: "/images/gallery/horizontal-5.jpg", alt: "image", orientation: "horizontal" },
-    { src: "/images/gallery/vertical-1.jpg", alt: "image", orientation: "vertical" },
-    { src: "/images/gallery/vertical-2.jpg", alt: "image", orientation: "vertical" },
-  ],
+  /** Image list is built at build time from `public/images/gallery` — see `getGalleryImages` */
+  images: [],
 };
 
 export { person, social, newsletter, home, cv, blog, bioPage, projects, gallery };

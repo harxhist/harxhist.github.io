@@ -169,6 +169,25 @@
   }
 }
 
+/* Footer nav: matrix green text, sky-blue underline; hover text turns red.
+   Once UI global `a` styles win without !important — force intended colors. */
+.footerNavLink,
+.footerNavLink:link,
+.footerNavLink:visited {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #00ff41 !important;
+  text-decoration: underline !important;
+  text-decoration-color: #87ceeb !important;
+  text-underline-offset: 0.2em;
+  text-decoration-thickness: 1px;
+}
+
+.footerNavLink:hover,
+.footerNavLink:focus-visible {
+  color: #ff3333 !important;
+}
+
 @media (min-width: 768px) {
   .main {
     padding-left: var(--space-4);

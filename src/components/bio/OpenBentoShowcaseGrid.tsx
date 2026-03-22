@@ -27,9 +27,8 @@ type SocialCardsResponse = {
     label: string;
     url: string;
     embedUrl: string;
-    mapboxImageUrl?: string;
-    mapboxImageUrlLight?: string;
-    mapboxImageUrlDark?: string;
+    mapboxImageDataUrlLight?: string;
+    mapboxImageDataUrlDark?: string;
   };
   github: {
     url: string;
@@ -106,7 +105,7 @@ function formatCompact(value: number | undefined): string | undefined {
 
 export default function OpenBentoShowcaseGrid() {
   const [socialData, setSocialData] = useState<SocialCardsResponse>(fallbackData);
-  /** When Mapbox static URLs 403 (e.g. token URL restrictions), fall back to OSM iframe. */
+  /** When a map image fails to decode (rare), fall back to OSM iframe. */
   const [mapboxImageFailed, setMapboxImageFailed] = useState(false);
   const siteTheme = useSyncExternalStore(subscribeSiteTheme, getSiteThemeSnapshot, () => "light");
 
@@ -184,15 +183,10 @@ export default function OpenBentoShowcaseGrid() {
   const mapboxDisplayUrl = useMemo(() => {
     const m = socialData.map;
     if (siteTheme === "dark") {
-      return m.mapboxImageUrlDark ?? m.mapboxImageUrl ?? m.mapboxImageUrlLight;
+      return m.mapboxImageDataUrlDark ?? m.mapboxImageDataUrlLight;
     }
-    return m.mapboxImageUrlLight ?? m.mapboxImageUrl ?? m.mapboxImageUrlDark;
-  }, [
-    siteTheme,
-    socialData.map.mapboxImageUrl,
-    socialData.map.mapboxImageUrlDark,
-    socialData.map.mapboxImageUrlLight,
-  ]);
+    return m.mapboxImageDataUrlLight ?? m.mapboxImageDataUrlDark;
+  }, [siteTheme, socialData.map.mapboxImageDataUrlDark, socialData.map.mapboxImageDataUrlLight]);
 
   useEffect(() => {
     setMapboxImageFailed(false);
@@ -235,7 +229,7 @@ export default function OpenBentoShowcaseGrid() {
         <div className="showcase-card-inner showcase-text">
           <span className="showcase-text-title">About</span>
           <span className="showcase-text-body">
-            Engineer by trade, ambivert by nature. IITK undergrad, average grades, zero regrets. I'll rash-drive at 140 to a 10-day silent meditation retreat and call it balance. Jack of all sports, master of none. Occasional drinker, full-time contradiction. 25, single, cute & open-minded. A fundamentalist still learning the middle ground.
+           I'll drive at 130 to a 10-day silent meditation retreat and call it balance. Dabbler in all sports. Certified paradox. 25, curious & open-minded. Software Engineer by trade, ambivert. IITK undergrad. A man of conviction, still learning the middle ground.
           </span>
         </div>
       </div>
@@ -327,7 +321,7 @@ export default function OpenBentoShowcaseGrid() {
         <div className="showcase-card-inner showcase-image">
           <img
             className="showcase-image-media"
-            src="/images/gallery/horizontal-0.jpg"
+            src="/images/gallery/horizontal-7.jpg"
             alt="Showcase image"
           />
         </div>

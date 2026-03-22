@@ -35,6 +35,7 @@ jobs:
 
       - name: Build with Next.js
         env:
+          NEXT_PUBLIC_GA_MEASUREMENT_ID: ${{ secrets.NEXT_PUBLIC_GA_MEASUREMENT_ID }}
           MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
           MAPBOX_STYLE: ${{ secrets.MAPBOX_STYLE }}
           MAPBOX_STYLE_DARK: ${{ secrets.MAPBOX_STYLE_DARK }}

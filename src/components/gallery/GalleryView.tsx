@@ -2,14 +2,18 @@
 
 import { MasonryGrid } from "@once-ui-system/core";
 import { OptimizedMedia } from "@/components";
-import { gallery } from "@/resources";
+import type { GalleryImageItem } from "@/lib/gallery-images";
 
-export default function GalleryView() {
+type Props = {
+  images: GalleryImageItem[];
+};
+
+export default function GalleryView({ images }: Props) {
   return (
     <MasonryGrid columns={2} s={{ columns: 1 }}>
-      {gallery.images.map((image, index) => (
+      {images.map((image, index) => (
         <OptimizedMedia
-          key={index}
+          key={image.src}
           priority={index < 2}
           sizes="(max-width: 560px) 100vw, 50vw"
           radius="var(--radius-m, 8px)"

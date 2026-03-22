@@ -267,26 +267,14 @@ export function MatrixLanding({ data }: { data: Landing }) {
         >
           <Link
             href="/bio"
-            className="matrix-link"
-            style={{
-              color: matrixGreen,
-              textDecoration: "none",
-              fontSize: "1rem",
-              fontWeight: 600,
-            }}
+            className={`matrix-link ${styles.footerNavLink}`}
           >
             → personal (bio · gallery)
           </Link>
           <br />
           <Link
             href="/cv"
-            className="matrix-link"
-            style={{
-              color: matrixGreen,
-              textDecoration: "none",
-              fontSize: "1rem",
-              fontWeight: 600,
-            }}
+            className={`matrix-link ${styles.footerNavLink}`}
           >
             → portfolio (CV · projects)
           </Link>
