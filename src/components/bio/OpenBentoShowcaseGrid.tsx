@@ -106,6 +106,8 @@ function formatCompact(value: number | undefined): string | undefined {
 
 export default function OpenBentoShowcaseGrid() {
   const [socialData, setSocialData] = useState<SocialCardsResponse>(fallbackData);
+  /** When Mapbox static URLs 403 (e.g. token URL restrictions), fall back to OSM iframe. */
+  const [mapboxImageFailed, setMapboxImageFailed] = useState(false);
   const siteTheme = useSyncExternalStore(subscribeSiteTheme, getSiteThemeSnapshot, () => "light");
 
   useEffect(() => {
@@ -191,6 +193,12 @@ export default function OpenBentoShowcaseGrid() {
     socialData.map.mapboxImageUrlDark,
     socialData.map.mapboxImageUrlLight,
   ]);
+
+  useEffect(() => {
+    setMapboxImageFailed(false);
+  }, [mapboxDisplayUrl]);
+
+  const showMapboxImage = Boolean(mapboxDisplayUrl) && !mapboxImageFailed;
 
   return (
     <div className="showcase-grid">
@@ -388,12 +396,13 @@ export default function OpenBentoShowcaseGrid() {
           rel="noreferrer"
         >
           <div className="showcase-map-bg">
-            {mapboxDisplayUrl ? (
+            {showMapboxImage ? (
               <img
                 className="showcase-map-image"
                 src={mapboxDisplayUrl}
                 alt={socialData.map.label}
                 loading="lazy"
+                onError={() => setMapboxImageFailed(true)}
               />
             ) : socialData.map.embedUrl ? (
               <iframe
