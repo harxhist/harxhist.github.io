@@ -49,6 +49,125 @@
   text-align: center;
 }
 
+.bio-page-inner {
+  max-width: 900px;
+  padding: 48px 20px 80px;
+}
+
+/* Avely-style profile strip above the bento grid */
+.bio-profile {
+  max-width: 428px;
+  margin: 0 auto 40px;
+  text-align: center;
+}
+
+.bio-profile-copy-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 28px;
+  flex-wrap: wrap;
+}
+
+.bio-profile-copy-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  max-width: min(320px, calc(100vw - 2.5rem));
+  padding: 10px 16px;
+  border-radius: 16px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: rgba(0, 0, 0, 0.04);
+  color: #6b7280;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.bio-profile-copy-btn:hover {
+  background: rgba(0, 0, 0, 0.07);
+  color: #374151;
+}
+
+:root[data-theme="dark"] .bio-profile-copy-btn {
+  border-color: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.06);
+  color: #9ca3af;
+}
+
+:root[data-theme="dark"] .bio-profile-copy-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #e5e7eb;
+}
+
+.bio-profile-copy-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.bio-profile-copy-icon {
+  flex-shrink: 0;
+  opacity: 0.75;
+}
+
+.bio-profile-copied {
+  font-size: 13px;
+  font-weight: 600;
+  color: #059669;
+}
+
+:root[data-theme="dark"] .bio-profile-copied {
+  color: #34d399;
+}
+
+.bio-profile-identity {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.bio-profile-avatar {
+  width: 160px;
+  height: 160px;
+  border-radius: 9999px;
+  object-fit: cover;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+:root[data-theme="dark"] .bio-profile-avatar {
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.bio-profile-handle {
+  margin: 32px 0 0;
+  font-size: clamp(28px, 6vw, 32px);
+  line-height: 1.2;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: #000;
+}
+
+:root[data-theme="dark"] .bio-profile-handle {
+  color: #fff;
+}
+
+.bio-profile-tagline {
+  margin: 12px 0 0;
+  max-width: min(500px, 100%);
+  font-size: 18px;
+  line-height: 1.45;
+  font-weight: 400;
+  color: #6b7280;
+}
+
+:root[data-theme="dark"] .bio-profile-tagline {
+  color: #9ca3af;
+}
+
 .landing-section-title {
   font-size: clamp(28px, 4vw, 44px);
   font-weight: 800;
@@ -74,10 +193,10 @@
 }
 
 /*
- * Bento grid: 12 equal columns on wide viewports. Each card uses .showcase-bento-*
- * with grid-column / grid-row so every row can use a different width recipe.
- * Tweak the span values (they must sum to 12 per row) to change layouts.
- * Rows 1–2: 3 + 6 + 3 (same as former 1fr 2fr 1fr). Row 3: 3 + 3 + 6 (sm + sm + lg map).
+ * Bento grid: 12 columns on wide viewports.
+ * Row 1: Instagram, LinkedIn, X, GitHub (3+3+3+3).
+ * Row 2: Photo (6), YouTube (3), Contact (3).
+ * Row 3: Quote (6), Map (6).
  */
 .showcase-grid {
   display: grid;
@@ -87,15 +206,21 @@
   margin: 0 auto;
 }
 
+/* Row 1: social stack — Instagram, LinkedIn, X, GitHub */
 @media (min-width: 901px) {
   .showcase-bento-instagram {
     grid-column: 1 / span 3;
     grid-row: 1;
   }
 
-  .showcase-bento-photo {
-    grid-column: 4 / span 6;
-    grid-row: 2;
+  .showcase-bento-linkedin {
+    grid-column: 4 / span 3;
+    grid-row: 1;
+  }
+
+  .showcase-bento-twitter {
+    grid-column: 7 / span 3;
+    grid-row: 1;
   }
 
   .showcase-bento-github {
@@ -103,28 +228,25 @@
     grid-row: 1;
   }
 
-  .showcase-bento-spotify {
-    grid-column: 1 / span 3;
-    grid-row: 2;
-  }
-
-  .showcase-bento-cv {
-    grid-column: 4 / span 6;
-    grid-row: 1;
-  }
-
-  .showcase-bento-twitter {
-    grid-column: 10 / span 3;
+  /* Row 2: photo + YouTube + contact */
+  .showcase-bento-photo {
+    grid-column: 1 / span 6;
     grid-row: 2;
   }
 
   .showcase-bento-youtube {
-    grid-column: 1 / span 3;
-    grid-row: 3;
+    grid-column: 7 / span 3;
+    grid-row: 2;
   }
 
+  .showcase-bento-contact {
+    grid-column: 10 / span 3;
+    grid-row: 2;
+  }
+
+  /* Row 3: quote + map */
   .showcase-bento-quote {
-    grid-column: 4 / span 3;
+    grid-column: 1 / span 6;
     grid-row: 3;
   }
 
@@ -137,9 +259,10 @@
 .showcase-card {
   border-radius: 24px;
   overflow: hidden;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: transform 0.35s ease;
   /* Grid/flex children default to min-width:auto; allow columns to shrink evenly */
   min-width: 0;
+  isolation: isolate;
 }
 
 .showcase-card-github {
@@ -156,17 +279,24 @@
 
 .showcase-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
 }
 
 .showcase-card-inner {
   height: 100%;
   padding: 24px;
-  background: #fff;
-  border: 1px solid rgba(0, 0, 0, 0.06);
   border-radius: 24px;
   display: flex;
   flex-direction: column;
+  position: relative;
+  transition: border-color 0.35s ease;
+  /* Light: flat solid cards (no glass, no shadow). */
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  background: #fff;
+  box-shadow: none;
+}
+
+:root:not([data-theme="dark"]) .showcase-card:hover .showcase-card-inner:not(.showcase-spotify--has-art) {
+  border-color: rgba(0, 0, 0, 0.1);
 }
 
 .showcase-card-link {
@@ -175,8 +305,23 @@
 }
 
 :root[data-theme="dark"] .showcase-card-inner {
-  background: #1a1a1a;
-  border-color: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.16);
+  background: rgba(32, 32, 34, 0.42);
+  backdrop-filter: blur(44px) saturate(210%) brightness(1.06);
+  -webkit-backdrop-filter: blur(44px) saturate(210%) brightness(1.06);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.45), 0 14px 36px rgba(0, 0, 0, 0.55), 0 32px 72px rgba(0, 0, 0, 0.5),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.22);
+}
+
+:root[data-theme="dark"] .showcase-card:hover .showcase-card-inner:not(.showcase-spotify--has-art) {
+  border-color: rgba(255, 255, 255, 0.2);
+  background: rgba(38, 38, 40, 0.48);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5), 0 20px 48px rgba(0, 0, 0, 0.62), 0 44px 88px rgba(0, 0, 0, 0.55),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.28);
+}
+
+:root[data-theme="dark"] .showcase-card:hover .showcase-card-inner.showcase-spotify--has-art {
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.55), 0 22px 52px rgba(0, 0, 0, 0.62), inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 .showcase-card-sm {
@@ -239,6 +384,66 @@
   width: fit-content;
 }
 
+/* Mail / contact card (avely-style) */
+.showcase-card-inner.showcase-contact {
+  align-items: flex-start;
+  text-align: left;
+}
+
+.showcase-contact-icon-wrap {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+  flex-shrink: 0;
+  box-shadow: none;
+}
+
+.showcase-contact-mail-icon {
+  width: 24px;
+  height: 24px;
+  color: rgba(0, 0, 0, 0.55);
+}
+
+:root[data-theme="dark"] .showcase-contact-icon-wrap {
+  background: rgba(48, 48, 52, 0.4);
+  border-color: rgba(255, 255, 255, 0.16);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.45), inset 0 0 0 1px rgba(255, 255, 255, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(36px) saturate(200%) brightness(1.05);
+  -webkit-backdrop-filter: blur(36px) saturate(200%) brightness(1.05);
+}
+
+:root[data-theme="dark"] .showcase-contact-mail-icon {
+  color: #9ca3af;
+}
+
+.showcase-contact-email {
+  font-size: 12px;
+  word-break: break-word;
+}
+
+.showcase-contact-cta {
+  margin-top: auto;
+  width: 100%;
+  text-align: center;
+  padding: 10px 16px;
+  border-radius: 999px;
+  background: #111827;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+:root[data-theme="dark"] .showcase-contact-cta {
+  background: #e5e7eb;
+  color: #111827;
+}
+
 .showcase-card-inner.showcase-map {
   padding: 0;
 }
@@ -294,21 +499,28 @@
   position: absolute;
   bottom: 16px;
   left: 16px;
+  z-index: 2;
   background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.06);
   padding: 8px 14px;
-  border-radius: 10px;
+  border-radius: 12px;
   font-size: 13px;
   font-weight: 600;
   color: #374151;
   display: flex;
   align-items: center;
   gap: 6px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  box-shadow: none;
 }
 
 :root[data-theme="dark"] .showcase-map-label {
-  background: #262626;
+  background: rgba(38, 38, 40, 0.52);
+  border-color: rgba(255, 255, 255, 0.18);
   color: #d1d5db;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.45), 0 20px 48px rgba(0, 0, 0, 0.4), inset 0 0 0 1px rgba(255, 255, 255, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(40px) saturate(205%) brightness(1.06);
+  -webkit-backdrop-filter: blur(40px) saturate(205%) brightness(1.06);
 }
 
 .showcase-github-graph {
@@ -404,6 +616,10 @@
   background: #ebedf0;
 }
 
+:root[data-theme="dark"] .showcase-github-dot-level-0 {
+  background: rgba(255, 255, 255, 0.1);
+}
+
 .showcase-github-dot-level-1 {
   background: #9be9a8;
 }
@@ -428,6 +644,15 @@
   padding: 0;
   overflow: hidden;
   background: #0d0d0d;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border-color: rgba(0, 0, 0, 0.1);
+  box-shadow: none;
+}
+
+:root[data-theme="dark"] .showcase-card-inner.showcase-spotify--has-art {
+  border-color: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 10px 36px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
 .showcase-spotify-brand {
@@ -442,8 +667,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+  box-shadow: none;
   pointer-events: none;
+}
+
+:root[data-theme="dark"] .showcase-spotify-brand {
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
 }
 
 .showcase-spotify-art-bg {

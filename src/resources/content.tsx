@@ -28,7 +28,7 @@ const social: Social = [
   {
     name: "LinkedIn",
     icon: "linkedin",
-    link: "https://www.linkedin.com/in/hrxh",
+    link: "https://www.linkedin.com/in/harxhist",
     essential: true,
   },
   {
@@ -273,13 +273,20 @@ const blog: Blog = {
 const bioPage: Bio = {
   path: "/bio",
   label: "Bio",
-  title: `Personal – ${person.name}`,
-  description: `Personal bio, writings, and gallery of ${person.name}`,
+  title: `${person.name} — harxhist`,
+  description: person.name,
   intro:
     "Builder, runner, and mountain person. I enjoy systems work, simple tools, and writing notes that help me think clearly.",
   writingsTitle: "Musings",
   galleryTitle: "Gallery",
   contactTitle: "Find me",
+  profile: {
+    handle: "harxhist",
+    tagline: person.name,
+    linkedinUrl: "https://www.linkedin.com/in/harxhist",
+    contactEmail: person.email,
+    contactLabel: "Contact Me",
+  },
 };
 
 const projects: ProjectsPage = {

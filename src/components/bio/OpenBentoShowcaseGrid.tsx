@@ -70,9 +70,9 @@ const fallbackData: SocialCardsResponse = {
     handle: "@harxhist",
   },
   map: {
-    label: "Pacific Golf Estate, Dehradun, India",
-    url: "https://www.google.com/maps/place/Pacific+Golf+Estate/@30.381226,78.1074521,17z/data=!3m1!4b1!4m6!3m5!1s0x3908d7ed01f0a4bd:0xc8ec0a3ed6a1a96!8m2!3d30.3812214!4d78.110027!16s%2Fg%2F11g9dj59rl?entry=ttu&g_ep=EgoyMDI2MDMxOC4xIKXMDSoASAFQAw%3D%3D",
-    embedUrl: buildMapEmbedUrl("30.3812214", "78.110027"),
+    label: "Kulhan, Sahastradhara Road, Rājpur, dhanaula, Dehradun, Uttarakhand, 248013, India",
+    url: "https://www.google.com/maps/search/?api=1&query=30.3777028%2C78.1043593",
+    embedUrl: buildMapEmbedUrl("30.3777028", "78.1043593"),
   },
   github: {
     url: "https://github.com/harxhist",
@@ -103,9 +103,18 @@ function formatCompact(value: number | undefined): string | undefined {
   return new Intl.NumberFormat("en", { notation: "compact", maximumFractionDigits: 1 }).format(value);
 }
 
-export default function OpenBentoShowcaseGrid() {
+export type OpenBentoShowcaseGridProps = {
+  linkedinUrl: string;
+  contactEmail: string;
+  contactLabel?: string;
+};
+
+export default function OpenBentoShowcaseGrid({
+  linkedinUrl,
+  contactEmail,
+  contactLabel = "Contact Me",
+}: OpenBentoShowcaseGridProps) {
   const [socialData, setSocialData] = useState<SocialCardsResponse>(fallbackData);
-  /** When a map image fails to decode (rare), fall back to OSM iframe. */
   const [mapboxImageFailed, setMapboxImageFailed] = useState(false);
   const siteTheme = useSyncExternalStore(subscribeSiteTheme, getSiteThemeSnapshot, () => "light");
 
@@ -194,9 +203,19 @@ export default function OpenBentoShowcaseGrid() {
 
   const showMapboxImage = Boolean(mapboxDisplayUrl) && !mapboxImageFailed;
 
+  const linkedinHandle = useMemo(() => {
+    try {
+      const path = new URL(linkedinUrl).pathname.replace(/\/$/, "");
+      const seg = path.split("/").filter(Boolean).pop();
+      return seg ? `@${seg}` : "@harxhist";
+    } catch {
+      return "@harxhist";
+    }
+  }, [linkedinUrl]);
+
   return (
     <div className="showcase-grid">
-      <div className="showcase-card showcase-card-sm showcase-card-github showcase-bento-instagram">
+      <div className="showcase-card showcase-card-sm showcase-bento-instagram">
         <a
           href={socialData.instagram.url}
           className="showcase-card-inner showcase-social showcase-card-link"
@@ -225,13 +244,47 @@ export default function OpenBentoShowcaseGrid() {
         </a>
       </div>
 
-      <div className="showcase-card showcase-card-lg showcase-bento-cv">
-        <div className="showcase-card-inner showcase-text">
-          <span className="showcase-text-title">About</span>
-          <span className="showcase-text-body">
-           I'll drive at 130 to a 10-day silent meditation retreat and call it balance. Dabbler in all sports. Certified paradox. 25, curious & open-minded. Software Engineer by trade, ambivert. IITK undergrad. A man of conviction, still learning the middle ground.
+      <div className="showcase-card showcase-card-sm showcase-bento-linkedin">
+        <a
+          href={linkedinUrl}
+          className="showcase-card-inner showcase-social showcase-card-link"
+          target="_blank"
+          rel="noreferrer"
+        >
+          <div className="showcase-icon" style={{ background: "#0a66c2" }}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="white" aria-hidden>
+              <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.06 2.06 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065m1.782 13.019H3.555V9h3.564zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0z" />
+            </svg>
+          </div>
+          <span className="showcase-label">LinkedIn</span>
+          <span className="showcase-handle">{linkedinHandle}</span>
+          <span className="showcase-follow-btn" style={{ background: "#0a66c2" }}>
+            Connect
           </span>
-        </div>
+        </a>
+      </div>
+
+      <div className="showcase-card showcase-card-sm showcase-bento-twitter">
+        <a
+          href={socialData.twitter.url}
+          className="showcase-card-inner showcase-link showcase-card-link"
+          target="_blank"
+          rel="noreferrer"
+        >
+          <div className="showcase-icon" style={{ background: "#0f1419" }}>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="#ffffff">
+              <path d="M18.901 1.153h3.68l-8.04 9.19L24 22.847h-7.406l-5.8-7.584-6.64 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932zM17.61 20.645h2.039L6.486 3.24H4.298z" />
+            </svg>
+          </div>
+          <span className="showcase-label">X / Twitter</span>
+          <span className="showcase-handle">
+            {socialData.twitter.handle}
+            {twitterMeta ? ` • ${twitterMeta}` : ""}
+          </span>
+          <svg className="showcase-link-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M7 17L17 7M17 7H7M17 7v10" />
+          </svg>
+        </a>
       </div>
 
       <div className="showcase-card showcase-card-sm showcase-card-github showcase-bento-github">
@@ -281,73 +334,15 @@ export default function OpenBentoShowcaseGrid() {
         </a>
       </div>
 
-      <div className="showcase-card showcase-card-lg showcase-bento-spotify">
-        <a
-          href={socialData.spotify.url}
-          className={`showcase-card-inner showcase-spotify showcase-card-link${socialData.spotify.albumArtUrl ? " showcase-spotify--has-art" : ""}`}
-          target="_blank"
-          rel="noreferrer"
-          aria-label={`Open Spotify — ${socialData.spotify.title}`}
-        >
-          {socialData.spotify.albumArtUrl ? (
-            <div className="showcase-spotify-art-bg" aria-hidden>
-              <img
-                className="showcase-spotify-art-full"
-                src={socialData.spotify.albumArtUrl}
-                alt=""
-                loading="lazy"
-              />
-              <div className="showcase-spotify-scrim" />
-            </div>
-          ) : null}
-          <div className="showcase-spotify-brand" aria-hidden>
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="white" aria-hidden>
-              <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z" />
-            </svg>
-          </div>
-          <div
-            className={`showcase-spotify-body ${socialData.spotify.albumArtUrl ? "showcase-spotify-body--art" : "showcase-spotify-body--plain"}`}
-          >
-            <div className="showcase-spotify-content">
-              <div className="showcase-spotify-info">
-                <span className="showcase-spotify-track">{socialData.spotify.title}</span>
-              </div>
-            </div>
-          </div>
-        </a>
-      </div>
-
       <div className="showcase-card showcase-card-lg showcase-bento-photo">
         <div className="showcase-card-inner showcase-image">
           <img
             className="showcase-image-media"
             src="/images/gallery/horizontal-7.jpg"
-            alt="Showcase image"
+            alt="Gallery highlight"
+            loading="lazy"
           />
         </div>
-      </div>
-
-      <div className="showcase-card showcase-card-sm showcase-bento-twitter">
-        <a
-          href={socialData.twitter.url}
-          className="showcase-card-inner showcase-link showcase-card-link"
-          target="_blank"
-          rel="noreferrer"
-        >
-          <div className="showcase-icon" style={{ background: "#0f1419" }}>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="#ffffff">
-              <path d="M18.901 1.153h3.68l-8.04 9.19L24 22.847h-7.406l-5.8-7.584-6.64 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932zM17.61 20.645h2.039L6.486 3.24H4.298z" />
-            </svg>
-          </div>
-          <span className="showcase-label">Twitter / X</span>
-          <span className="showcase-handle">
-            {socialData.twitter.handle}
-            {twitterMeta ? ` • ${twitterMeta}` : ""}
-          </span>
-          <svg className="showcase-link-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M7 17L17 7M17 7H7M17 7v10" />
-          </svg>
-        </a>
       </div>
 
       <div className="showcase-card showcase-card-sm showcase-bento-youtube">
@@ -368,16 +363,40 @@ export default function OpenBentoShowcaseGrid() {
             {youtubeMeta ? ` • ${youtubeMeta}` : ""}
           </span>
           <span className="showcase-follow-btn" style={{ background: "#ff0000" }}>
-            {socialData.youtube.title}
+            Subscribe
           </span>
         </a>
       </div>
 
-      <div className="showcase-card showcase-card-sm showcase-bento-quote">
+      <div className="showcase-card showcase-card-sm showcase-bento-contact">
+        <a
+          href={`mailto:${contactEmail}`}
+          className="showcase-card-inner showcase-contact showcase-card-link"
+          target="_blank"
+          rel="noreferrer"
+        >
+          <div className="showcase-contact-icon-wrap">
+            <svg
+              className="showcase-contact-mail-icon"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              aria-hidden
+            >
+              <path d="M1.5 8.67v8.58a3 3 0 0 0 3 3h15a3 3 0 0 0 3-3V8.67l-8.928 5.493a3 3 0 0 1-3.144 0L1.5 8.67Z" />
+              <path d="M22.5 6.908V6.75a3 3 0 0 0-3-3h-15a3 3 0 0 0-3 3v.158l9.714 5.978a1.5 1.5 0 0 0 1.572 0L22.5 6.908Z" />
+            </svg>
+          </div>
+          <span className="showcase-label">{contactLabel}</span>
+          <span className="showcase-handle showcase-contact-email">{contactEmail}</span>
+          <span className="showcase-contact-cta">Contact</span>
+        </a>
+      </div>
+
+      <div className="showcase-card showcase-card-lg showcase-bento-quote">
         <div className="showcase-card-inner showcase-quote">
           <span className="showcase-quote-mark">"</span>
           <span className="showcase-text-body">
-            God doesn't sit on the jury in the Devil's Advocate's courtroom.
+            God doesn&apos;t sit on the jury in the Devil&apos;s Advocate&apos;s courtroom.
           </span>
         </div>
       </div>

@@ -261,6 +261,14 @@ export interface Bio extends BasePageConfig {
   writingsTitle: string;
   galleryTitle: string;
   contactTitle: string;
+  /** Avely-style profile header + link targets for the bento grid */
+  profile?: {
+    handle: string;
+    tagline: string;
+    linkedinUrl: string;
+    contactEmail: string;
+    contactLabel?: string;
+  };
 }
 
 /**
