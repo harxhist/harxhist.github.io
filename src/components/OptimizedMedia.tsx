@@ -15,6 +15,11 @@ export interface OptimizedMediaProps {
   aspectRatio?: string;
   priority?: boolean;
   sizes?: string;
+  quality?: number;
+  /** Fired when the underlying <img> finishes loading (only for images). */
+  onLoadingComplete?: (img: HTMLImageElement) => void;
+  /** Fired when the underlying <img> errors (only for images). */
+  onError?: (err: unknown) => void;
   /** For video: poster image URL to show before play */
   poster?: string;
   /** Extra class for the wrapper */
@@ -32,6 +37,9 @@ export function OptimizedMedia({
   aspectRatio = "16 / 9",
   priority = false,
   sizes = "(max-width: 960px) 100vw, 960px",
+  quality = 75,
+  onLoadingComplete,
+  onError,
   poster,
   className,
   radius = "var(--radius-m, 8px)",
@@ -87,6 +95,10 @@ export function OptimizedMedia({
         fill
         sizes={sizes}
         priority={priority}
+        quality={quality}
+        loading={priority ? "eager" : "lazy"}
+        onLoadingComplete={onLoadingComplete}
+        onError={onError}
         style={{ objectFit: "cover" }}
       />
     </div>

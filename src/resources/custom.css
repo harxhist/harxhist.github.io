@@ -868,3 +868,34 @@
     grid-column: span 1;
   }
 }
+
+/* Gallery: initial batch loader overlay */
+.gallery-initial-loader-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 1);
+  z-index: 9999;
+  pointer-events: none;
+}
+
+:root[data-theme="dark"] .gallery-initial-loader-overlay {
+  background: rgba(0, 0, 0, 1);
+}
+
+.gallery-initial-loader {
+  width: 22px;
+  height: 22px;
+  border-radius: 9999px;
+  border: 2px solid rgba(100, 116, 139, 0.25);
+  border-top-color: rgba(56, 189, 248, 0.95);
+  animation: gallery-spin 0.8s linear infinite;
+}
+
+@keyframes gallery-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
