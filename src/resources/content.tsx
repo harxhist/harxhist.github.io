@@ -78,9 +78,7 @@ const home: Home = {
     href: "/projects/shorten",
   },
   subline: (
-    <>
-    I'm Selene, a design engineer at <Text as="span" size="xl" weight="strong">ONCE UI</Text>, where I craft intuitive <br /> user experiences. After hours, I build my own projects.
-</>
+    <>Building bridges with code</>
   ),
   
   landing: {

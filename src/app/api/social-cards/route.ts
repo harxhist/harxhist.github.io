@@ -273,58 +273,53 @@ async function fetchGithubContributions(
     const payload = (await response.json()) as {
       contributions?: Array<{ date?: string; count?: number }>;
     };
+
     const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    const recentTimeline = (payload.contributions ?? [])
-      .filter((item) => {
-        if (!item.date) {
-          return false;
-        }
-        const parsed = new Date(item.date);
-        if (Number.isNaN(parsed.getTime())) {
-          return false;
-        }
-        parsed.setHours(0, 0, 0, 0);
-        return parsed <= today;
-      })
-      .sort((a, b) => (a.date || "").localeCompare(b.date || ""));
-    const dailyCounts = recentTimeline.map((item) => Math.max(0, item.count ?? 0));
-    if (!dailyCounts.length) {
+    today.setUTCHours(0, 0, 0, 0);
+
+    // Build a lookup map of date → count from the API response.
+    const lookup = new Map<string, number>();
+    for (const item of payload.contributions ?? []) {
+      if (!item.date) continue;
+      const parsed = new Date(item.date);
+      if (Number.isNaN(parsed.getTime())) continue;
+      parsed.setUTCHours(0, 0, 0, 0);
+      // Exclude future dates.
+      if (parsed > today) continue;
+      lookup.set(item.date, Math.max(0, item.count ?? 0));
+    }
+
+    if (lookup.size === 0) {
       return undefined;
     }
 
-    // Show daily contributions from today back to the last 35 days.
-    const recentDays = recentTimeline.slice(-35).map((item) => ({
-      date: item.date || "",
-      count: Math.max(0, item.count ?? 0),
-      dateLabel: item.date ? formatContributionDate(item.date) : "",
-    }));
-    const paddedDays =
-      recentDays.length < 35
-        ? [
-            ...Array.from({ length: 35 - recentDays.length }, () => ({
-              date: "",
-              count: 0,
-              dateLabel: "",
-            })),
-            ...recentDays,
-          ]
-        : recentDays;
-    const paddedCounts = paddedDays.map((item) => item.count);
-    const max = Math.max(...paddedCounts);
-    const levels = paddedCounts.map((count) => normalizeContributionLevel(count, max));
-    const latestNonZero = [...recentTimeline]
-      .reverse()
-      .find((item) => typeof item.count === "number" && item.count > 0 && item.date);
+    // Fill exactly 35 days ending on today, inserting zeros for any missing dates.
+    // This ensures trailing empty days (e.g. today and yesterday with no commits)
+    // are always present in the grid rather than being silently dropped.
+    const filledDays: Array<{ date: string; count: number; dateLabel: string }> = [];
+    for (let i = 34; i >= 0; i--) {
+      const d = new Date(today);
+      d.setUTCDate(d.getUTCDate() - i);
+      const key = d.toISOString().slice(0, 10); // "YYYY-MM-DD"
+      const count = lookup.get(key) ?? 0;
+      filledDays.push({
+        date: key,
+        count,
+        dateLabel: formatContributionDate(key),
+      });
+    }
+
+    const max = Math.max(...filledDays.map((d) => d.count));
+    const levels = filledDays.map((d) => normalizeContributionLevel(d.count, max));
+
+    // latestContribution: most recent day with count > 0.
+    const latestNonZero = [...filledDays].reverse().find((d) => d.count > 0);
 
     return {
       levels,
-      days: paddedDays,
-      latestContribution: latestNonZero?.date
-        ? {
-            count: Math.max(0, latestNonZero.count ?? 0),
-            dateLabel: formatContributionDate(latestNonZero.date),
-          }
+      days: filledDays,
+      latestContribution: latestNonZero
+        ? { count: latestNonZero.count, dateLabel: latestNonZero.dateLabel }
         : undefined,
     };
   } catch {
