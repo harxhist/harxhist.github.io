@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "serve out -l 3000",
     "lint": "next lint",
-    "optimize-assets": "node scripts/optimize-assets.mjs"
+    "optimize-assets": "node scripts/optimize-assets.mjs",
+    "optimize:gallery": "node scripts/optimize-gallery.mjs"
   },
   "dependencies": {
     "@mdx-js/loader": "^3.1.0",

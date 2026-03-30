@@ -29,7 +29,7 @@ export function getGalleryImages(): GalleryImageItem[] {
       base.startsWith("vertical-") ? "vertical" : "horizontal";
 
     return {
-      src: `/images/gallery/${filename}`,
+      src: `/images/gallery-opt/${filename.replace(/\.(jpe?g|png)$/i, ".webp")}`,
       alt: `Gallery photo — ${base.replace(/-/g, " ")}`,
       orientation,
     };
