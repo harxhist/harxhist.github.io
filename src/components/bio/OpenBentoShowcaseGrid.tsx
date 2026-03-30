@@ -338,7 +338,7 @@ export default function OpenBentoShowcaseGrid({
         <div className="showcase-card-inner showcase-image">
           <img
             className="showcase-image-media"
-            src="/images/gallery/horizontal-7.jpg"
+            src="/images/gallery/horizontal-7.webp"
             alt="Gallery highlight"
             loading="lazy"
           />
