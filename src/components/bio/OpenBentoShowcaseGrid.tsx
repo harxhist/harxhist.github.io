@@ -103,6 +103,51 @@ function formatCompact(value: number | undefined): string | undefined {
   return new Intl.NumberFormat("en", { notation: "compact", maximumFractionDigits: 1 }).format(value);
 }
 
+// --- START: Added helper functions for processing GitHub data ---
+function normalizeContributionLevel(count: number, max: number): number {
+  if (count <= 0 || max <= 0) {
+    return 0;
+  }
+  const ratio = count / max;
+  if (ratio <= 0.25) {
+    return 1;
+  }
+  if (ratio <= 0.5) {
+    return 2;
+  }
+  if (ratio <= 0.75) {
+    return 3;
+  }
+  return 4;
+}
+
+function formatOrdinalDay(day: number): string {
+  const mod10 = day % 10;
+  const mod100 = day % 100;
+  if (mod10 === 1 && mod100 !== 11) {
+    return `${day}st`;
+  }
+  if (mod10 === 2 && mod100 !== 12) {
+    return `${day}nd`;
+  }
+  if (mod10 === 3 && mod100 !== 13) {
+    return `${day}rd`;
+  }
+  return `${day}th`;
+}
+
+function formatContributionDate(dateValue: string): string {
+  const parsed = new Date(dateValue);
+  if (Number.isNaN(parsed.getTime())) {
+    return dateValue;
+  }
+  const day = formatOrdinalDay(parsed.getUTCDate());
+  const month = parsed.toLocaleDateString("en-US", { month: "long", timeZone: "UTC" });
+  const year = parsed.getUTCFullYear();
+  return `${day} ${month}, ${year}`;
+}
+// --- END: Added helper functions ---
+
 export type OpenBentoShowcaseGridProps = {
   linkedinUrl: string;
   contactEmail: string;
@@ -137,6 +182,78 @@ export default function OpenBentoShowcaseGrid({
     };
 
     loadSocialCards();
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    let mounted = true;
+    const GITHUB_HANDLE = "harxhist";
+
+    const fetchFreshGithubData = async () => {
+      try {
+        const response = await fetch(
+          `https://github-contributions-api.jogruber.de/v4/${encodeURIComponent(GITHUB_HANDLE)}`,
+          { cache: "no-store" },
+        );
+        if (!response.ok) return;
+
+        const payload = (await response.json()) as {
+          contributions?: Array<{ date?: string; count?: number }>;
+        };
+
+        const today = new Date();
+        today.setUTCHours(0, 0, 0, 0);
+
+        const lookup = new Map<string, number>();
+        for (const item of payload.contributions ?? []) {
+          if (!item.date) continue;
+          const parsed = new Date(item.date);
+          if (Number.isNaN(parsed.getTime())) continue;
+          parsed.setUTCHours(0, 0, 0, 0);
+          if (parsed > today) continue;
+          lookup.set(item.date, Math.max(0, item.count ?? 0));
+        }
+
+        if (lookup.size === 0) return;
+
+        const filledDays: Array<{ date: string; count: number; dateLabel: string }> = [];
+        for (let i = 34; i >= 0; i--) {
+          const d = new Date(today);
+          d.setUTCDate(d.getUTCDate() - i);
+          const key = d.toISOString().slice(0, 10);
+          const count = lookup.get(key) ?? 0;
+          filledDays.push({
+            date: key,
+            count,
+            dateLabel: formatContributionDate(key),
+          });
+        }
+
+        const max = Math.max(...filledDays.map((d) => d.count));
+        const levels = filledDays.map((d) => normalizeContributionLevel(d.count, max));
+        const latestNonZero = [...filledDays].reverse().find((d) => d.count > 0);
+
+        if (mounted) {
+          setSocialData((prevData) => ({
+            ...prevData,
+            github: {
+              ...prevData.github,
+              contributions: levels,
+              contributionDays: filledDays,
+              latestContribution: latestNonZero
+                ? { count: latestNonZero.count, dateLabel: latestNonZero.dateLabel }
+                : undefined,
+            },
+          }));
+        }
+      } catch {
+        // Silently fail to avoid console noise on network errors.
+      }
+    };
+
+    fetchFreshGithubData();
     return () => {
       mounted = false;
     };
