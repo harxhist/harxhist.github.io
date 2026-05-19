@@ -58,14 +58,14 @@ export function PortfolioHeader({ pathname }: PortfolioHeaderProps) {
                       prefixIcon="person"
                       href="/cv"
                       label={cv.label}
-                      selected={pathname === "/cv"}
+                      selected={pathname.startsWith("/cv")}
                     />
                   </Row>
                   <Row hide s={{ hide: false }}>
                     <ToggleButton
                       prefixIcon="person"
                       href="/cv"
-                      selected={pathname === "/cv"}
+                      selected={pathname.startsWith("/cv")}
                     />
                   </Row>
                 </>

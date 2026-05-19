@@ -1,4 +1,4 @@
-import { Bio, Blog, Cv, Gallery, Home, Newsletter, Person, ProjectsPage, Social } from "@/types";
+import { Bio, Blog, Cv, Gallery, Home, Musings, Newsletter, Person, ProjectsPage, Social } from "@/types";
 import { Line, Row, Text } from "@once-ui-system/core";
 
 const person: Person = {
@@ -304,4 +304,11 @@ const gallery: Gallery = {
   images: [],
 };
 
-export { person, social, newsletter, home, cv, blog, bioPage, projects, gallery };
+const musings: Musings = {
+  path: "/musings",
+  label: "Musings",
+  title: `Musings – ${person.name}`,
+  description: "Poetry, stories, and scattered thoughts — in the spirit of Apple Notes.",
+};
+
+export { person, social, newsletter, home, cv, blog, bioPage, projects, gallery, musings };

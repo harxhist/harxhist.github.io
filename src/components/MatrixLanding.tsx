@@ -269,7 +269,7 @@ export function MatrixLanding({ data }: { data: Landing }) {
             href="/bio"
             className={`matrix-link ${styles.footerNavLink}`}
           >
-            → personal (bio · gallery)
+            → personal (bio · musings · gallery)
           </Link>
           <br />
           <Link

@@ -9,6 +9,7 @@ export {
   bioPage,
   projects,
   gallery,
+  musings,
 } from "./content";
 
 export {

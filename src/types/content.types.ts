@@ -278,6 +278,12 @@ export interface Bio extends BasePageConfig {
 export interface ProjectsPage extends BasePageConfig {}
 
 /**
+ * Musings page configuration.
+ * @description Personal writings — poetry, stories, and articles.
+ */
+export interface Musings extends BasePageConfig {}
+
+/**
  * Gallery page configuration.
  * @description Configuration for the Gallery page, including metadata, navigation label, and image list.
  */

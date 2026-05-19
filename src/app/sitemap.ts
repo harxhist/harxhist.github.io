@@ -1,3 +1,4 @@
+import { getMusings } from "@/lib/musings";
 import { getPosts } from "@/utils/utils";
 import { baseURL, routes as routesConfig } from "@/resources";
 
@@ -7,6 +8,11 @@ export default async function sitemap() {
   const blogs = getPosts(["src", "app", "blog", "posts"]).map((post) => ({
     url: `${baseURL}/blog/${post.slug}`,
     lastModified: post.metadata.publishedAt,
+  }));
+
+  const musingPosts = getMusings().map((post) => ({
+    url: `${baseURL}/musings/${post.slug}`,
+    lastModified: post.metadata.publishedAt ?? new Date().toISOString().split("T")[0],
   }));
 
   const projectPosts = getPosts(["src", "app", "projects", "posts"]).map((post) => ({
@@ -23,5 +29,5 @@ export default async function sitemap() {
     lastModified: new Date().toISOString().split("T")[0],
   }));
 
-  return [...routes, ...blogs, ...projectPosts];
+  return [...routes, ...blogs, ...musingPosts, ...projectPosts];
 }

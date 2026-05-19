@@ -1,7 +1,7 @@
 "use client";
 
 import { Fade, Flex, Line, Row, ToggleButton } from "@once-ui-system/core";
-import { bioPage, display, gallery, person, routes } from "@/resources";
+import { bioPage, display, gallery, musings, person, routes } from "@/resources";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import styles from "@/components/Header.module.scss";
 
@@ -66,6 +66,25 @@ export function PersonalHeader({ pathname }: PersonalHeaderProps) {
                       prefixIcon="person"
                       href="/bio"
                       selected={pathname.startsWith("/bio")}
+                    />
+                  </Row>
+                </>
+              )}
+              {routes["/musings"] && (
+                <>
+                  <Row s={{ hide: true }}>
+                    <ToggleButton
+                      prefixIcon="musings"
+                      href="/musings"
+                      label={musings.label}
+                      selected={pathname.startsWith("/musings")}
+                    />
+                  </Row>
+                  <Row hide s={{ hide: false }}>
+                    <ToggleButton
+                      prefixIcon="musings"
+                      href="/musings"
+                      selected={pathname.startsWith("/musings")}
                     />
                   </Row>
                 </>

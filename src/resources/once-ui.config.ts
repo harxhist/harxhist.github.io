@@ -21,6 +21,7 @@ const routes: RoutesConfig = {
   "/projects": true,
   "/blog": true,
   "/gallery": true,
+  "/musings": true,
 };
 
 const display: DisplayConfig = {
