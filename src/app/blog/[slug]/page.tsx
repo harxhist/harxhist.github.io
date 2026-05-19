@@ -5,20 +5,15 @@ import {
   Schema,
   Column,
   Heading,
-  HeadingNav,
-  Icon,
   Row,
   Text,
   SmartLink,
   Avatar,
-  Line,
 } from "@once-ui-system/core";
 import { baseURL, cv, blog, person } from "@/resources";
 import { formatDate } from "@/utils/formatDate";
 import { getPosts } from "@/utils/utils";
 import { Metadata } from "next";
-import React from "react";
-import { Posts } from "@/components/blog/Posts";
 import { ShareSection } from "@/components/blog/ShareSection";
 
 // Placeholder slug when no posts exist (required by output: "export")
@@ -74,15 +69,8 @@ export default async function Blog({ params }: { params: Promise<{ slug: string 
     notFound();
   }
 
-  const avatars =
-    post.metadata.team?.map((person) => ({
-      src: person.avatar,
-    })) || [];
-
   return (
-    <Row fillWidth>
-      <Row maxWidth={12} m={{ hide: true }} />
-      <Row fillWidth horizontal="center">
+    <Row fillWidth horizontal="center">
         <Column as="section" maxWidth="m" horizontal="center" gap="l" paddingTop="24">
           <Schema
             as="blogPosting"
@@ -149,27 +137,8 @@ export default async function Blog({ params }: { params: Promise<{ slug: string 
             url={`${baseURL}${blog.path}/${post.slug}`} 
           />
 
-          <Column fillWidth gap="40" horizontal="center" marginTop="40">
-            <Line maxWidth="40" />
-            <Text as="h2" id="recent-posts" variant="heading-strong-xl" marginBottom="24">
-              Recent posts
-            </Text>
-            <Posts exclude={[post.slug]} range={[1, 2]} columns="2" thumbnail direction="column" />
-          </Column>
           <ScrollToHash />
         </Column>
-      </Row>
-      <Column
-        maxWidth={12}
-        paddingLeft="40"
-        fitHeight
-        position="sticky"
-        top="80"
-        gap="16"
-        m={{ hide: true }}
-      >
-        <HeadingNav fitHeight />
-      </Column>
     </Row>
   );
 }

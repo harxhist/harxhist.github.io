@@ -276,7 +276,7 @@ export function MatrixLanding({ data }: { data: Landing }) {
             href="/cv"
             className={`matrix-link ${styles.footerNavLink}`}
           >
-            → portfolio (CV · projects)
+            → portfolio (CV · projects · blog)
           </Link>
         </section>
       </main>

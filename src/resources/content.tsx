@@ -122,6 +122,7 @@ const home: Home = {
     dislikes: "HATE: red tape, ads, bloatware, capitalism, meetings, waking up",
     linkItems: [
       { label: "github", href: social.find((s) => s.name === "GitHub")?.link ?? "#" },
+      { label: "blog", href: "/blog" },
       { label: "hire me", href: "/cv" },
       { label: "email", href: `mailto:${person.email}` },
     ],
@@ -264,8 +265,8 @@ const cv: Cv = {
 const blog: Blog = {
   path: "/blog",
   label: "Blog",
-  title: "Writing about design and tech...",
-  description: `Read what ${person.name} has been up to recently`,
+  title: "Blog",
+  description: `Notes on systems, memory, and things I build — by ${person.name}`,
 };
 
 const bioPage: Bio = {

@@ -1,3 +1,29 @@
+/* Blog MDX tables: top-left cell alignment */
+.mdx-table th,
+.mdx-table td {
+  vertical-align: top !important;
+  text-align: left !important;
+}
+
+.mdx-table th > :first-child,
+.mdx-table td > :first-child {
+  margin-top: 0;
+}
+
+.mdx-table th > :last-child,
+.mdx-table td > :last-child {
+  margin-bottom: 0;
+}
+
+/* Blog: AnythingLLM chat highlight in blockquotes */
+.chat-response-highlight {
+  background-color: #82f1fc;
+}
+
+:root[data-theme="dark"] .chat-response-highlight {
+  background-color: #045b9c;
+}
+
 /* Matrix landing */
 .matrix-landing .matrix-link:hover {
   text-decoration: underline;

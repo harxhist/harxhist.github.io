@@ -57,10 +57,32 @@ function CustomLink({ href, children, ...props }: CustomLinkProps) {
   );
 }
 
-function createImage({ alt, src, ...props }: MediaProps & { src: string }) {
+function createImage({ alt, src }: MediaProps & { src: string }) {
   if (!src) {
     console.error("Media requires a valid 'src' property.");
     return null;
+  }
+
+  const isSvg = src.endsWith(".svg");
+
+  if (isSvg) {
+    return (
+      <div
+        style={{
+          width: "100%",
+          marginTop: 8,
+          marginBottom: 16,
+          overflowX: "auto",
+        }}
+      >
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={src}
+          alt={alt ?? ""}
+          style={{ width: "100%", height: "auto", display: "block" }}
+        />
+      </div>
+    );
   }
 
   return (
@@ -164,6 +186,109 @@ function createHR() {
   );
 }
 
+const tableCellStyle: React.CSSProperties = {
+  padding: "10px 12px",
+  borderBottom: "1px solid var(--neutral-border-medium, rgba(255,255,255,0.12))",
+  verticalAlign: "top",
+  textAlign: "left",
+  lineHeight: 1.6,
+};
+
+function createTable({ children }: { children: ReactNode }) {
+  return (
+    <div
+      className="mdx-table-scroll"
+      style={{
+        overflowX: "auto",
+        marginTop: 8,
+        marginBottom: 16,
+      }}
+    >
+      <table
+        className="mdx-table"
+        style={{
+          width: "100%",
+          borderCollapse: "collapse",
+          fontSize: "0.9rem",
+        }}
+      >
+        {children}
+      </table>
+    </div>
+  );
+}
+
+function createTableHead({ children }: { children: ReactNode }) {
+  return <thead>{children}</thead>;
+}
+
+function createTableBody({ children }: { children: ReactNode }) {
+  return <tbody>{children}</tbody>;
+}
+
+function createTableRow({ children }: { children: ReactNode }) {
+  return <tr>{children}</tr>;
+}
+
+function createTableHeader({ children }: { children: ReactNode }) {
+  return (
+    <th
+      style={{
+        ...tableCellStyle,
+        textAlign: "left",
+        fontWeight: 600,
+        borderBottom: "2px solid var(--neutral-border-medium, rgba(255,255,255,0.2))",
+        whiteSpace: "nowrap",
+      }}
+    >
+      {children}
+    </th>
+  );
+}
+
+function createTableCell({ children }: { children: ReactNode }) {
+  return <td style={tableCellStyle}>{children}</td>;
+}
+
+const tocIndent: Record<1 | 2 | 3, number> = { 1: 0, 2: 28, 3: 56 };
+
+function BlogToc({ children }: { children: ReactNode }) {
+  return (
+    <nav
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        gap: 6,
+        marginTop: 8,
+        marginBottom: 24,
+      }}
+    >
+      {children}
+    </nav>
+  );
+}
+
+function BlogTocItem({
+  level = 1,
+  index,
+  href,
+  children,
+}: {
+  level?: 1 | 2 | 3;
+  index: string;
+  href: string;
+  children: ReactNode;
+}) {
+  return (
+    <div style={{ paddingLeft: tocIndent[level] }}>
+      <Text variant="body-default-m" onBackground="neutral-medium" as="span" style={{ lineHeight: "175%" }}>
+        {index}{" "}
+        <a href={href}>{children}</a>
+      </Text>
+    </div>
+  );
+}
+
 const components = {
   p: createParagraph as any,
   h1: createHeading("h1") as any,
@@ -180,6 +305,14 @@ const components = {
   ul: createList("ul") as any,
   li: createListItem as any,
   hr: createHR as any,
+  table: createTable as any,
+  thead: createTableHead as any,
+  tbody: createTableBody as any,
+  tr: createTableRow as any,
+  th: createTableHeader as any,
+  td: createTableCell as any,
+  BlogToc,
+  BlogTocItem,
   Heading,
   Text,
   CodeBlock,
